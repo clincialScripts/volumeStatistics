@@ -17,10 +17,10 @@ using VMS.TPS.VisualScripting.ElementInterface;
 namespace Structure_Info
 {
   // TODO: Replace the existing class name with your own class name.
-  public class YourActionPackElement : VisualScriptElement
+  public class structureStatsActionPack : VisualScriptElement
   {
-    public YourActionPackElement() {}
-    public YourActionPackElement(IVisualScriptElementRuntimeHost host) {}
+    public structureStatsActionPack() {}
+    public structureStatsActionPack(IVisualScriptElementRuntimeHost host) {}
 
     public override bool RequiresRuntimeConsole { get { return false; } }
     public override bool RequiresDatabaseModifications { get { return false; } }
