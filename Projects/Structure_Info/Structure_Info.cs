@@ -16,47 +16,73 @@ using VMS.TPS.VisualScripting.ElementInterface;
 
 namespace Structure_Info
 {
-  // TODO: Replace the existing class name with your own class name.
-  public class structureStatsActionPack : VisualScriptElement
-  {
-    public structureStatsActionPack() {}
-    public structureStatsActionPack(IVisualScriptElementRuntimeHost host) {}
-
-    public override bool RequiresRuntimeConsole { get { return false; } }
-    public override bool RequiresDatabaseModifications { get { return false; } }
-
-
-    [ActionPackExecuteMethod]
-    [MethodImpl(MethodImplOptions.NoInlining)]
-    public PlanSetup Execute(PlanSetup ps)
+    // TODO: Replace the existing class name with your own class name.
+    public class structureStatsActionPack : VisualScriptElement
     {
-      // TODO: Add your code here.
-      return null;
-    }
+        public structureStatsActionPack() { }
+        public structureStatsActionPack(IVisualScriptElementRuntimeHost host) { }
 
-    public override string DisplayName
-    {
-      get
-      {
-        // TODO: Replace "Element Name" with the name that you want to be displayed in the Visual Scripting UI.
-        return "Element Name";
-      }
-    }
+        public override bool RequiresRuntimeConsole { get { return false; } }
+        public override bool RequiresDatabaseModifications { get { return false; } }
 
-    IDictionary<string, string> m_options = new Dictionary<string, string>();
-    public override void SetOption(string key, string value)
-    {
-      m_options.Add(key, value);
-    }
 
-    public override IEnumerable<KeyValuePair<string, IEnumerable<string>>> AllowedOptions
-    {
-      get
-      {
-        return new KeyValuePair<string, IEnumerable<string>>[] {
+        [ActionPackExecuteMethod]
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public IEnumerable<structureStats> Execute(IEnumerable<StructureSet> structureSets)
+        {
+            // TODO: Add your code here.
+            List<structureStats> ss_list = new List<structureStats>();
+            foreach(StructureSet ss in structureSets)
+            {
+                ss_list.Add(new structureStats
+                {
+                    Id = ss.Id,
+                    Value = "Number of structures",
+                    Evaluation = ss.Structures.Count().ToString(),
+                });
+                
+                foreach (Structure s in ss.Structures.Where(o=>o.DicomType == "GTV"))
+                {
+                    ss_list.Add(new structureStats
+                    {
+                        Id = s.Id,
+                        Value = "GTV Volume [cc]",
+                        Evaluation = s.Volume.ToString("F2"),
+                    });
+                }
+            }
+            return ss_list;
+        }
+
+        public override string DisplayName
+        {
+            get
+            {
+                // TODO: Replace "Element Name" with the name that you want to be displayed in the Visual Scripting UI.
+                return "Structure Statistics";
+            }
+        }
+
+        IDictionary<string, string> m_options = new Dictionary<string, string>();
+        public override void SetOption(string key, string value)
+        {
+            m_options.Add(key, value);
+        }
+
+        public override IEnumerable<KeyValuePair<string, IEnumerable<string>>> AllowedOptions
+        {
+            get
+            {
+                return new KeyValuePair<string, IEnumerable<string>>[] {
             new KeyValuePair<string, IEnumerable<string>>("TestOption", new string[] { "Test Value" })
           };
-      }
+            }
+        }
+        public class structureStats
+        {
+            public string Id { get; set; }
+            public string Value { get; set; }
+            public string Evaluation { get; set; }
+        }
     }
-  }
 }
